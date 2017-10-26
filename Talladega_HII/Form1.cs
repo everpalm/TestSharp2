@@ -19,15 +19,83 @@ namespace Talladega_HII
         public Form1()
         {
             InitializeComponent();
+
+            XmlDataDocument xmldoc = new XmlDataDocument();
+            XmlNode xmlnode;
+            FileStream fs = new FileStream("tree.xml", FileMode.Open, FileAccess.Read);
+            xmldoc.Load(fs);
+            xmlnode = xmldoc.ChildNodes[1];
+            treeView1.Nodes.Clear();
+            treeView1.Nodes.Add(new TreeNode(xmldoc.DocumentElement.Name));
+            TreeNode tNode;
+            tNode = treeView1.Nodes[0];
+            AddNode(xmlnode, tNode);
+            treeView1.ExpandAll();  // Expand treeview at startup
+        }
+
+        private void get_picture(string szFileName)
+        {
+            try
+            {
+                Image myPic = Image.FromFile(szFileName);    // Open image file
+                this.pictureBox1.BackgroundImage = myPic;   // picturebox background
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return;
+            }
+            return;
         }
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             //MessageBox.Show(e.Node.Text);
             System.Diagnostics.Debug.Print("Node = {0}", e.Node.Text);
-            if(e.Node.Text == "bookstore")
+            /* Reform if structure to switch
+            if (e.Node.Text == "bookstore")
             {
                 System.Diagnostics.Debug.Print("Inside stuffs");
+                //System.Diagnostics.Process.Start("1-1.png");  // Open file with system default application
+                Image myPic = Image.FromFile("1-1.png");    // Open image file
+                this.pictureBox1.BackgroundImage = myPic;   // picturebox background
+            }
+            */
+
+            switch(e.Node.Text)
+            {
+                case "Advanced":
+                    get_picture("Advanced.png");
+                    /*
+                    try
+                    {
+                        Image myPic = Image.FromFile("Advanced.png");    // Open image file
+                        this.pictureBox1.BackgroundImage = myPic;   // picturebox background
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString());
+                        return;
+                    }
+                    */
+                    break;
+                case "Configuration_Utility":
+                    get_picture("Configuration_Utility.png");
+                    /*
+                    try
+                    {
+                        Image myPic = Image.FromFile("Configuration_Utility.png");    // Open image file
+                        this.pictureBox1.BackgroundImage = myPic;   // picturebox background
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString());
+                        return;
+                    }
+                    */
+                    break;
+                default:
+                    return;
             }
         }
 
@@ -93,6 +161,8 @@ namespace Talladega_HII
 
         private void button2_Click(object sender, EventArgs e)
         {
+            // Discard loading treeview by clicking button
+            /*
             XmlDataDocument xmldoc = new XmlDataDocument();
             XmlNode xmlnode;
             FileStream fs = new FileStream("tree.xml", FileMode.Open, FileAccess.Read);
@@ -103,6 +173,9 @@ namespace Talladega_HII
             TreeNode tNode;
             tNode = treeView1.Nodes[0];
             AddNode(xmlnode, tNode);
+            */
+            this.Close();
+            return;
         }
     }
 }
